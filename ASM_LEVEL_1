@@ -1,0 +1,145 @@
+	.file	"BinaryReader.c"
+	.text
+	.globl	is_printable
+	.def	is_printable;	.scl	2;	.type	32;	.endef
+	.seh_proc	is_printable
+is_printable:
+	.seh_endprologue
+	subl	$32, %ecx
+	cmpb	$94, %cl
+	setbe	%al
+	movzbl	%al, %eax
+	ret
+	.seh_endproc
+	.section .rdata,"dr"
+.LC0:
+	.ascii "rb\0"
+.LC1:
+	.ascii "Error opening file\0"
+.LC2:
+	.ascii "%08lX \0"
+.LC3:
+	.ascii "%02X \0"
+.LC4:
+	.ascii "|\0"
+	.text
+	.globl	main
+	.def	main;	.scl	2;	.type	32;	.endef
+	.seh_proc	main
+main:
+	pushq	%r15
+	.seh_pushreg	%r15
+	pushq	%r14
+	.seh_pushreg	%r14
+	pushq	%r13
+	.seh_pushreg	%r13
+	pushq	%r12
+	.seh_pushreg	%r12
+	pushq	%rbp
+	.seh_pushreg	%rbp
+	pushq	%rdi
+	.seh_pushreg	%rdi
+	pushq	%rsi
+	.seh_pushreg	%rsi
+	pushq	%rbx
+	.seh_pushreg	%rbx
+	subq	$56, %rsp
+	.seh_stackalloc	56
+	.seh_endprologue
+	movq	%rdx, %rbx
+	call	__main
+	movq	8(%rbx), %rcx
+	leaq	.LC0(%rip), %rdx
+	call	fopen
+	movq	%rax, %r14
+	movl	$0, %r13d
+	testq	%rax, %rax
+	je	.L16
+	leaq	32(%rsp), %r15
+	leaq	.LC3(%rip), %r12
+	jmp	.L3
+.L16:
+	leaq	.LC1(%rip), %rcx
+	call	printf
+	movl	$1, %eax
+	jmp	.L2
+	.p2align 4
+.L5:
+	addl	$1, %ebx
+	addq	$1, %rsi
+	cmpl	$16, %ebx
+	je	.L17
+.L6:
+	cmpl	%ebx, %ebp
+	jle	.L5
+	movzbl	(%rsi), %edx
+	movq	%r12, %rcx
+	call	printf
+	jmp	.L5
+.L17:
+	movl	$124, %ecx
+	call	putchar
+	testl	%ebp, %ebp
+	jle	.L7
+	leal	-1(%rbp), %eax
+	leaq	1(%rdi,%rax), %rbx
+	jmp	.L10
+.L8:
+	movl	$46, %ecx
+	call	putchar
+.L9:
+	addq	$1, %rdi
+	cmpq	%rbx, %rdi
+	je	.L7
+.L10:
+	movzbl	(%rdi), %ecx
+	leal	-32(%rcx), %eax
+	cmpb	$94, %al
+	ja	.L8
+	movzbl	%cl, %ecx
+	call	putchar
+	jmp	.L9
+.L7:
+	leaq	.LC4(%rip), %rcx
+	call	puts
+	addl	%ebp, %r13d
+.L3:
+	movq	%r14, %r9
+	movl	$16, %r8d
+	movl	$1, %edx
+	movq	%r15, %rcx
+	call	fread
+	movq	%rax, %rbp
+	testq	%rax, %rax
+	je	.L18
+	movl	%r13d, %edx
+	leaq	.LC2(%rip), %rcx
+	call	printf
+	leaq	32(%rsp), %rdi
+	movq	%rdi, %rsi
+	movl	$0, %ebx
+	jmp	.L6
+.L18:
+	movq	%r14, %rcx
+	call	fclose
+	movl	$0, %eax
+.L2:
+	addq	$56, %rsp
+	popq	%rbx
+	popq	%rsi
+	popq	%rdi
+	popq	%rbp
+	popq	%r12
+	popq	%r13
+	popq	%r14
+	popq	%r15
+	ret
+	.seh_endproc
+	.def	__main;	.scl	2;	.type	32;	.endef
+	.ident	"GCC: (Rev8, Built by MSYS2 project) 15.2.0"
+	.def	fopen;	.scl	2;	.type	32;	.endef
+	.def	printf;	.scl	2;	.type	32;	.endef
+	.def	putchar;	.scl	2;	.type	32;	.endef
+	.def	puts;	.scl	2;	.type	32;	.endef
+	.def	fread;	.scl	2;	.type	32;	.endef
+	.def	fclose;	.scl	2;	.type	32;	.endef

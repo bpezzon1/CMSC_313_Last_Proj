@@ -1,0 +1,154 @@
+	.file	"BinaryReader.c"
+	.text
+	.globl	is_printable
+	.def	is_printable;	.scl	2;	.type	32;	.endef
+	.seh_proc	is_printable
+is_printable:
+	pushq	%rbp
+	.seh_pushreg	%rbp
+	movq	%rsp, %rbp
+	.seh_setframe	%rbp, 0
+	.seh_endprologue
+	movl	%ecx, %eax
+	movb	%al, 16(%rbp)
+	cmpb	$31, 16(%rbp)
+	jbe	.L2
+	cmpb	$126, 16(%rbp)
+	ja	.L2
+	movl	$1, %eax
+	jmp	.L4
+.L2:
+	movl	$0, %eax
+.L4:
+	popq	%rbp
+	ret
+	.seh_endproc
+	.section .rdata,"dr"
+.LC0:
+	.ascii "rb\0"
+.LC1:
+	.ascii "Error opening file\0"
+.LC2:
+	.ascii "%08lX \0"
+.LC3:
+	.ascii "%02X \0"
+.LC4:
+	.ascii "|\0"
+	.text
+	.globl	main
+	.def	main;	.scl	2;	.type	32;	.endef
+	.seh_proc	main
+main:
+	pushq	%rbp
+	.seh_pushreg	%rbp
+	movq	%rsp, %rbp
+	.seh_setframe	%rbp, 0
+	subq	$80, %rsp
+	.seh_stackalloc	80
+	.seh_endprologue
+	movl	%ecx, 16(%rbp)
+	movq	%rdx, 24(%rbp)
+	call	__main
+	movl	$0, -4(%rbp)
+	movq	24(%rbp), %rax
+	addq	$8, %rax
+	movq	(%rax), %rax
+	leaq	.LC0(%rip), %rdx
+	movq	%rax, %rcx
+	call	fopen
+	movq	%rax, -16(%rbp)
+	cmpq	$0, -16(%rbp)
+	jne	.L8
+	leaq	.LC1(%rip), %rax
+	movq	%rax, %rcx
+	call	printf
+	movl	$1, %eax
+	jmp	.L17
+.L16:
+	movl	-4(%rbp), %eax
+	leaq	.LC2(%rip), %rcx
+	movl	%eax, %edx
+	call	printf
+	movl	$0, -8(%rbp)
+	jmp	.L9
+.L11:
+	movq	-24(%rbp), %rax
+	cmpl	%eax, -8(%rbp)
+	jge	.L10
+	movl	-8(%rbp), %eax
+	cltq
+	movzbl	-48(%rbp,%rax), %eax
+	movzbl	%al, %eax
+	leaq	.LC3(%rip), %rcx
+	movl	%eax, %edx
+	call	printf
+.L10:
+	addl	$1, -8(%rbp)
+.L9:
+	cmpl	$15, -8(%rbp)
+	jle	.L11
+	movl	$124, %ecx
+	call	putchar
+	movl	$0, -8(%rbp)
+	jmp	.L12
+.L15:
+	movl	-8(%rbp), %eax
+	cltq
+	movzbl	-48(%rbp,%rax), %eax
+	movzbl	%al, %eax
+	movl	%eax, %ecx
+	call	is_printable
+	testl	%eax, %eax
+	je	.L13
+	movl	-8(%rbp), %eax
+	cltq
+	movzbl	-48(%rbp,%rax), %eax
+	movzbl	%al, %eax
+	movl	%eax, %ecx
+	call	putchar
+	jmp	.L14
+.L13:
+	movl	$46, %ecx
+	call	putchar
+.L14:
+	addl	$1, -8(%rbp)
+.L12:
+	movq	-24(%rbp), %rax
+	cmpl	%eax, -8(%rbp)
+	jl	.L15
+	leaq	.LC4(%rip), %rax
+	movq	%rax, %rcx
+	call	puts
+	movq	-24(%rbp), %rax
+	movl	%eax, %edx
+	movl	-4(%rbp), %eax
+	addl	%edx, %eax
+	movl	%eax, -4(%rbp)
+.L8:
+	movq	-16(%rbp), %rdx
+	leaq	-48(%rbp), %rax
+	movq	%rdx, %r9
+	movl	$16, %r8d
+	movl	$1, %edx
+	movq	%rax, %rcx
+	call	fread
+	movq	%rax, -24(%rbp)
+	cmpq	$0, -24(%rbp)
+	jne	.L16
+	movq	-16(%rbp), %rax
+	movq	%rax, %rcx
+	call	fclose
+	movl	$0, %eax
+.L17:
+	addq	$80, %rsp
+	popq	%rbp
+	ret
+	.seh_endproc
+	.def	__main;	.scl	2;	.type	32;	.endef
+	.ident	"GCC: (Rev8, Built by MSYS2 project) 15.2.0"
+	.def	fopen;	.scl	2;	.type	32;	.endef
+	.def	printf;	.scl	2;	.type	32;	.endef
+	.def	putchar;	.scl	2;	.type	32;	.endef
+	.def	puts;	.scl	2;	.type	32;	.endef
+	.def	fread;	.scl	2;	.type	32;	.endef
+	.def	fclose;	.scl	2;	.type	32;	.endef

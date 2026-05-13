@@ -1,0 +1,206 @@
+	.file	"BinaryReader.c"
+	.text
+	.p2align 4
+	.globl	is_printable
+	.def	is_printable;	.scl	2;	.type	32;	.endef
+	.seh_proc	is_printable
+is_printable:
+	.seh_endprologue
+	xorl	%eax, %eax
+	subl	$32, %ecx
+	cmpb	$94, %cl
+	setbe	%al
+	ret
+	.seh_endproc
+	.section .rdata,"dr"
+.LC0:
+	.ascii "rb\0"
+.LC1:
+	.ascii "Error opening file\0"
+.LC2:
+	.ascii "%08lX \0"
+.LC3:
+	.ascii "%02X \0"
+.LC4:
+	.ascii "|\0"
+	.section	.text.startup,"x"
+	.p2align 4
+	.globl	main
+	.def	main;	.scl	2;	.type	32;	.endef
+	.seh_proc	main
+main:
+	pushq	%r13
+	.seh_pushreg	%r13
+	pushq	%r12
+	.seh_pushreg	%r12
+	pushq	%rbp
+	.seh_pushreg	%rbp
+	pushq	%rdi
+	.seh_pushreg	%rdi
+	pushq	%rsi
+	.seh_pushreg	%rsi
+	pushq	%rbx
+	.seh_pushreg	%rbx
+	subq	$56, %rsp
+	.seh_stackalloc	56
+	.seh_endprologue
+	xorl	%ebp, %ebp
+	movq	%rdx, %rbx
+	call	__main
+	movq	8(%rbx), %rcx
+	leaq	.LC0(%rip), %rdx
+	call	fopen
+	movq	%rax, %r13
+	testq	%rax, %rax
+	jne	.L4
+	jmp	.L19
+	.p2align 4,,10
+	.p2align 3
+.L6:
+	movl	$124, %ecx
+	call	putchar
+	.p2align 4
+	.p2align 3
+.L13:
+	leaq	.LC4(%rip), %rcx
+	addl	%esi, %ebp
+	call	puts
+.L4:
+	movq	%r13, %r9
+	movl	$16, %r8d
+	movl	$1, %edx
+	leaq	32(%rsp), %rcx
+	call	fread
+	movq	%rax, %rsi
+	testq	%rax, %rax
+	je	.L20
+	movl	%ebp, %edx
+	leaq	.LC2(%rip), %rcx
+	call	printf
+	testl	%esi, %esi
+	jle	.L6
+	movzbl	32(%rsp), %edx
+	leaq	.LC3(%rip), %rcx
+	call	printf
+	cmpl	$1, %esi
+	je	.L9
+	movzbl	33(%rsp), %edx
+	leaq	.LC3(%rip), %rcx
+	call	printf
+	cmpl	$2, %esi
+	je	.L9
+	movzbl	34(%rsp), %edx
+	leaq	.LC3(%rip), %rcx
+	call	printf
+	cmpl	$3, %esi
+	je	.L9
+	movzbl	35(%rsp), %edx
+	leaq	.LC3(%rip), %rcx
+	call	printf
+	cmpl	$4, %esi
+	je	.L9
+	movzbl	36(%rsp), %edx
+	leaq	.LC3(%rip), %rcx
+	call	printf
+	cmpl	$5, %esi
+	je	.L9
+	movzbl	37(%rsp), %edx
+	leaq	.LC3(%rip), %rcx
+	call	printf
+	cmpl	$6, %esi
+	je	.L9
+	movzbl	38(%rsp), %edx
+	leaq	.LC3(%rip), %rcx
+	call	printf
+	cmpl	$7, %esi
+	je	.L9
+	movzbl	39(%rsp), %edx
+	leaq	.LC3(%rip), %rcx
+	call	printf
+	cmpl	$8, %esi
+	je	.L9
+	movzbl	40(%rsp), %edx
+	leaq	.LC3(%rip), %rcx
+	call	printf
+	cmpl	$9, %esi
+	je	.L9
+	movzbl	41(%rsp), %edx
+	leaq	.LC3(%rip), %rcx
+	call	printf
+	cmpl	$10, %esi
+	je	.L9
+	movzbl	42(%rsp), %edx
+	leaq	.LC3(%rip), %rcx
+	call	printf
+	cmpl	$11, %esi
+	je	.L9
+	movzbl	43(%rsp), %edx
+	leaq	.LC3(%rip), %rcx
+	call	printf
+	cmpl	$12, %esi
+	je	.L9
+	movzbl	44(%rsp), %edx
+	leaq	.LC3(%rip), %rcx
+	call	printf
+	cmpl	$13, %esi
+	je	.L9
+	movzbl	45(%rsp), %edx
+	leaq	.LC3(%rip), %rcx
+	call	printf
+	cmpl	$14, %esi
+	je	.L9
+	movzbl	46(%rsp), %edx
+	leaq	.LC3(%rip), %rcx
+	call	printf
+	cmpl	$15, %esi
+	je	.L9
+	movzbl	47(%rsp), %edx
+	leaq	.LC3(%rip), %rcx
+	call	printf
+.L9:
+	movl	$124, %ecx
+	leaq	32(%rsp), %rbx
+	call	putchar
+	leal	-1(%rsi), %eax
+	leaq	33(%rsp,%rax), %rdi
+	.p2align 4
+	.p2align 3
+.L8:
+	movzbl	(%rbx), %ecx
+	leal	-32(%rcx), %eax
+	cmpb	$94, %al
+	jbe	.L18
+	movl	$46, %ecx
+.L18:
+	call	putchar
+	addq	$1, %rbx
+	cmpq	%rbx, %rdi
+	jne	.L8
+	jmp	.L13
+.L20:
+	movq	%r13, %rcx
+	call	fclose
+	xorl	%eax, %eax
+.L3:
+	addq	$56, %rsp
+	popq	%rbx
+	popq	%rsi
+	popq	%rdi
+	popq	%rbp
+	popq	%r12
+	popq	%r13
+	ret
+.L19:
+	leaq	.LC1(%rip), %rcx
+	call	printf
+	movl	$1, %eax
+	jmp	.L3
+	.seh_endproc
+	.def	__main;	.scl	2;	.type	32;	.endef
+	.ident	"GCC: (Rev8, Built by MSYS2 project) 15.2.0"
+	.def	fopen;	.scl	2;	.type	32;	.endef
+	.def	putchar;	.scl	2;	.type	32;	.endef
+	.def	puts;	.scl	2;	.type	32;	.endef
+	.def	fread;	.scl	2;	.type	32;	.endef
+	.def	printf;	.scl	2;	.type	32;	.endef
+	.def	fclose;	.scl	2;	.type	32;	.endef
